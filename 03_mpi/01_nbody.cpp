@@ -4,10 +4,10 @@
 
 int main() {
   const int N = 20;
-  //const int np = 4;
+  const int np = 4;
   double x[N], y[N], m[N], fx[N], fy[N];
   for(int i=0; i<N; i++) {
-    //if(i % (N / np) == 0) srand48(i / (N / np));
+    if(i % (N / np) == 0) srand48(i / (N / np));//seedをprocessごとに揃えるうのか
     x[i] = drand48();
     y[i] = drand48();
     m[i] = drand48();

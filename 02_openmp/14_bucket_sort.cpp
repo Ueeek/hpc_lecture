@@ -13,6 +13,7 @@ int main() {
   printf("\n");
 
   std::vector<int> bucket(range); 
+#pragma omp for
   for (int i=0; i<range; i++) {
     bucket[i] = 0;
   }
@@ -20,9 +21,14 @@ int main() {
     bucket[key[i]]++;
   }
   for (int i=0, j=0; i<range; i++) {
-    for (; bucket[i]>0; bucket[i]--) {
-      key[j++] = i;
-    }
+#pragma opm for
+      for(int k=0;k<bucket[i];k++){
+          key[j+k]=i;
+      }
+      j+=bucket[i];
+    //for (; bucket[i]>0; bucket[i]--) {
+    //  key[j++] = i;
+    //}
   }
 
   for (int i=0; i<n; i++) {
