@@ -36,6 +36,8 @@ int main(int argc, char** argv) {
       }
     }
   }
+  //each rankは、jのloopを分担している。
+  //集計する必要がある(和をとる)
   MPI_Allreduce(MPI_IN_PLACE, fx, N, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
   MPI_Allreduce(MPI_IN_PLACE, fy, N, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
   for(int i=0; i<N; i++) {

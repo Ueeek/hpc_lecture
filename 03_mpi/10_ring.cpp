@@ -14,9 +14,14 @@ int main(int argc, char ** argv) {
   }
   int recv_from = (rank + 1) % size;
   int send_to = (rank - 1 + size) % size;
-  MPI_Send(send, N, MPI_INT, send_to, 0, MPI_COMM_WORLD);
-  MPI_Recv(recv, N, MPI_INT, recv_from, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-  printf("rank%d: send=[%d %d %d %d], recv=[%d %d %d %d]\n",rank,
-         send[0],send[1],send[2],send[3],recv[0],recv[1],recv[2],recv[3]);
+  //SEND(data,size,type,dest,tag,commu)
+  //
+for(int itr=0;itr<=N;itr++){
+    MPI_Send(send, N, MPI_INT, send_to, 0, MPI_COMM_WORLD);
+    MPI_Recv(recv, N, MPI_INT, recv_from, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    printf("rank%d:irank %d  send=[%d %d %d %d], recv=[%d %d %d %d]\n",rank,itr,
+                 send[0],send[1],send[2],send[3],recv[0],recv[1],recv[2],recv[3]);
+    for(int i=0;i<N;i++)send[i]=recv[i];
+}
   MPI_Finalize();
 }

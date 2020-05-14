@@ -31,6 +31,7 @@ int main(int argc, char** argv) {
   MPI_Bcast( m, N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
   MPI_Bcast(fx, N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
   MPI_Bcast(fy, N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+  //03では、0がやっていた処理を並列化できる
   for(int i=0; i<N; i++) {
     for(int j=0; j<N; j++) {
       if(i != j) {

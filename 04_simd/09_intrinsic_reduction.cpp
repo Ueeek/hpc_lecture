@@ -11,6 +11,9 @@ int main() {
   bvec = _mm256_add_ps(bvec,avec);
   bvec = _mm256_hadd_ps(bvec,bvec);
   bvec = _mm256_hadd_ps(bvec,bvec);
+  for (int i=0; i<N; i++){
+    printf("%g\n",a[i]);
+  }
   _mm256_store_ps(a, bvec);
   for (int i=0; i<N; i++)
     printf("%g\n",a[i]);
