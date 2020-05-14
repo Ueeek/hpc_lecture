@@ -1,6 +1,7 @@
 # hpc_lecture
 Student ID: 20M30858 , Koichiro Ueki
 
+
 |          | Topic                                | Sample code               |
 | -------- | ------------------------------------ | ------------------------- |
 | Class 1  | Introduction to parallel programming |                           |
