@@ -5,10 +5,10 @@ __global__ void thread(float *a) {
 }
 
 int main(void) {
-  const int N = 4;
+  const int N = 1025;
   float *a;
   cudaMallocManaged(&a, N*sizeof(float));
-  thread<<<1,N>>>(a);
+  thread<<<4,N>>>(a);
   cudaDeviceSynchronize();
   for (int i=0; i<N; i++)
     printf("%d %g\n",i,a[i]);

@@ -8,6 +8,8 @@ int main() {
   for(int i=0; i<8; i++) {
     a = __pgi_vectoridx();
     b[0] = __pgi_vectoridx();
+    a=100;
+    b[0]=230;
   }
   printf("%d %d\n",a,b[0]);
 }
