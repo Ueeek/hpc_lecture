@@ -25,10 +25,10 @@ int main() {
     __m256 x_i_vec = _mm256_set1_ps(x[i]);
     __m256 y_i_vec = _mm256_set1_ps(y[i]);
 
-    //mask
     __m256 j_vec = _mm256_load_ps(MASK);
     __m256 mask = _mm256_cmp_ps(j_vec,i_vec,_CMP_NEQ_OQ);
 
+    //apply mask
     __m256 x_j_vec = _mm256_setzero_ps();
     __m256 y_j_vec = _mm256_setzero_ps();
     __m256 m_j_vec = _mm256_setzero_ps();
@@ -63,6 +63,7 @@ int main() {
     __m256 i_y_fvec = -_mm256_mul_ps(rym_vec,r3_vec);
 
 
+    //aggregate
     __m256 x_fvec = _mm256_permute2f128_ps(i_x_fvec,i_x_fvec,1);
     x_fvec = _mm256_add_ps(x_fvec,i_x_fvec);
     x_fvec = _mm256_hadd_ps(x_fvec,x_fvec);
@@ -73,6 +74,7 @@ int main() {
     y_fvec = _mm256_hadd_ps(y_fvec,y_fvec);
     y_fvec = _mm256_hadd_ps(y_fvec,y_fvec);
 
+    //write
     _mm256_store_ps(fx,x_fvec);
     _mm256_store_ps(fy,y_fvec);
     printf("%d %g %g\n",i,fx[i],fy[i]);
