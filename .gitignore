@@ -1,5 +1,11 @@
+*.dat
+*.h5
 *.o
 *.out
 *.s
+<<<<<<< HEAD
 
 ./04_simd/xsimd
+=======
+.ipynb_checkpoints
+>>>>>>> upstream/master
