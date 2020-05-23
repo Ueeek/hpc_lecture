@@ -31,7 +31,7 @@ int main() {
   cudaMallocManaged(&bucket,range*sizeof(int));
   for(int i=0;i<range;i++)bucket[i]=0;
 
-  bucketsort<<<(N+M-1)/M,M,range>>>(key,bucket,N);
+  bucketsort<<<(N+M-1)/M,M>>>(key,bucket,N);
 
   cudaDeviceSynchronize();
 
