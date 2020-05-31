@@ -421,7 +421,6 @@ struct block_task
             epilogue_op.set_secondary_accumulator();
 
         // Whether the addend from C needs loading
-        bool must_init_addend = epilogue_op.must_init_addend();
 
         #pragma unroll
         for (int x = 0; x < ThreadItemsX; ++x)
@@ -449,11 +448,6 @@ struct block_task
                     if ((grid_raster.block_item_coords.x + thread_item_coords_tile_x) < dim_n &&
                         (grid_raster.block_item_coords.y + thread_item_coords_tile_y + i) < dim_m)
                     {
-                        if (must_init_addend)
-                        {
-                            ldg_cg(c_slice, c_ptr);
-                        }
-
                         c_slice = epilogue_op(accumulator.get(x, y + i), c_slice, c_idx + i);
 
                         stg_cg(c_ptr, c_slice);
