@@ -1,7 +1,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cmath>
-#include<immintrin.h>
+#include <immintrin.h>
 
 int main() {
   const int N = 8;
@@ -78,5 +78,6 @@ int main() {
     _mm256_store_ps(fx,x_fvec);
     _mm256_store_ps(fy,y_fvec);
     printf("%d %g %g\n",i,fx[i],fy[i]);
-  }
-}
+  for(int i=0; i<N; i++)
+    printf("%d %g %g\n",i,fx[i],fy[i]);
+}}
