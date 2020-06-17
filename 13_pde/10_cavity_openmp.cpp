@@ -26,6 +26,7 @@ float rho=1.0;
 float nu = 0.1 ;
 float dt = 0.001;
 
+//write out data into txt file in order to plot this result with matplot lib in a notebook
 template<typename T>
 void write_ouput_file(std::string name,T* v,int H,int W){
     std::ofstream outputfile(name);
@@ -38,6 +39,7 @@ void write_ouput_file(std::string name,T* v,int H,int W){
     outputfile.close();
 }
 
+//print 1D array as 2D array
 template<typename T>
 void print_vec_as_2D(T* v,int H,int W){
     for(int i=0;i<H;i++){
@@ -49,6 +51,7 @@ void print_vec_as_2D(T* v,int H,int W){
 }
 
 void build_up_b(float* b, float* u, float* v){
+#pragma omp parallel for
     for(int i=1;i<ny-1;i++){
         for(int j=1;j<nx-1;j++){
             b[i*nx+j] = (rho*(1.0/dt
@@ -64,11 +67,15 @@ void build_up_b(float* b, float* u, float* v){
 
 void pressure_poisson(float* p, float* b){
     float pn[nx*ny];
+
+#pragma omp parallel for
     for(int i=0;i<nx*ny;i++) pn[i]= p[i];//copy from p
 
     for(int q=0;q<nit;q++){
+#pragma omp parallel for
         for(int i=0;i<nx*ny;i++) pn[i]= p[i];//copy from p
 
+#pragma omp parallel for
         for(int i=1;i<ny-1;i++){
             for(int j=1;j<nx-1;j++){
                 p[i*nx+j] = (((pn[i*nx+j+1]+pn[i*nx+j-1])*dy*dy
@@ -80,10 +87,12 @@ void pressure_poisson(float* p, float* b){
             }
         }
         //boundary
+#pragma omp parallel for
         for(int i=0;i<ny;i++){
             p[i*nx+nx-1] = p[i*nx+nx-2];
             p[i*nx+0] = p[i*nx+1];
         }
+#pragma omp parallel for
         for(int i=0;i<nx;i++){
             p[0*nx+i] = p[1*nx+i];
             p[(ny-1)*nx+i] =0.0;
@@ -96,16 +105,21 @@ void cavaty_flow(float* u, float* v, float* p){
     float un[ny*nx];
     float vn[ny*nx];
     float b[ny*nx];
-    for(int i=0;i<ny;i++)for(int j=0;j<nx;j++)b[i*nx+j]=0.0;
+#pragma omp parallel for
+    for(int i=0;i<nx*ny;i++)b[i]=0.0;
 
     for(int t=0; t<nt;t++){
         //copy into un,vn
-        for(int i=0;i<ny;i++)for(int j=0;j<nx;j++) un[i*nx+j]=u[i*nx+j];
-        for(int i=0;i<ny;i++)for(int j=0;j<nx;j++) vn[i*nx+j]=v[i*nx+j];
+#pragma omp parallel for
+        for(int i=0;i<nx*ny;i++) un[i] = u[i];
+#pragma omp parallel for
+        for(int i=0;i<nx*ny;i++) vn[i] = v[i];
+
         build_up_b(b,u,v);
         pressure_poisson(p,b);
 
 
+#pragma omp parallel for
         for(int i=1;i<ny-1;i++){
             for(int j=1;j<nx-1;j++){
                 u[i*nx+j] = (un[i*nx+j]-un[i*nx+j]*dt/dx
@@ -125,6 +139,7 @@ void cavaty_flow(float* u, float* v, float* p){
                         +dt/dy/dy*(vn[(i+1)*nx+j]-2.0*vn[i*nx+j]+vn[(i-1)*nx+j])));
             }
         }
+#pragma omp parallel for
         for(int i=0;i<ny;i++){
             u[i*nx+0]=0.0;
             u[i*nx+nx-1]=0.0;
@@ -132,6 +147,7 @@ void cavaty_flow(float* u, float* v, float* p){
             v[i*nx+nx-1]=0.0;
         }
 
+#pragma omp parallel for
         for(int i=0;i<nx;i++){
             u[0*nx+i]=0.0;
             u[(ny-1)*nx+i]=1.0;
@@ -183,10 +199,10 @@ int main(void){
 
 
 
-    write_ouput_file("./res/p.txt",p,ny,nx);
-    write_ouput_file("./res/u.txt",u,ny,nx);
-    write_ouput_file("./res/v.txt",v,ny,nx);
-    write_ouput_file("./res/X.txt",X,ny,nx);
-    write_ouput_file("./res/Y.txt",Y,ny,nx);
+    //write_ouput_file("./res/p.txt",p,ny,nx);
+    //write_ouput_file("./res/u.txt",u,ny,nx);
+    //write_ouput_file("./res/v.txt",v,ny,nx);
+    //write_ouput_file("./res/X.txt",X,ny,nx);
+    //write_ouput_file("./res/Y.txt",Y,ny,nx);
     return 0;
 }

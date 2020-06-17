@@ -95,12 +95,12 @@ void cavaty_flow(float* u, float* v, float* p){
     float un[ny*nx];
     float vn[ny*nx];
     float b[ny*nx];
-    for(int i=0;i<ny;i++)for(int j=0;j<nx;j++)b[i*nx+j]=0.0;
+    for(int i=0;i<nx*ny;i++)b[i]=0.0;
 
     for(int t=0; t<nt;t++){
         //copy into un,vn
-        for(int i=0;i<ny;i++)for(int j=0;j<nx;j++) un[i*nx+j]=u[i*nx+j];
-        for(int i=0;i<ny;i++)for(int j=0;j<nx;j++) vn[i*nx+j]=v[i*nx+j];
+        for(int i=0;i<nx*ny;i++)un[i]=u[i];
+        for(int i=0;i<nx*ny;i++)vn[i]=v[i];
         build_up_b(b,u,v);
         pressure_poisson(p,b);
 
@@ -182,10 +182,10 @@ int main(void){
 
 
 
-    write_ouput_file("./res/p.txt",p,ny,nx);
-    write_ouput_file("./res/u.txt",u,ny,nx);
-    write_ouput_file("./res/v.txt",v,ny,nx);
-    write_ouput_file("./res/X.txt",X,ny,nx);
-    write_ouput_file("./res/Y.txt",Y,ny,nx);
+    //write_ouput_file("./res/p.txt",p,ny,nx);
+    //write_ouput_file("./res/u.txt",u,ny,nx);
+    //write_ouput_file("./res/v.txt",v,ny,nx);
+    //write_ouput_file("./res/X.txt",X,ny,nx);
+    //write_ouput_file("./res/Y.txt",Y,ny,nx);
     return 0;
 }
